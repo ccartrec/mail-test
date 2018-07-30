@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css?family=PT+Sans+Narrow:400,700&subset=cyrillic');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  height: 100%;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: url('https://img.fonwall.ru/o/uf/chernaya-dira-pogloshchenie-zvezdi.jpg') no-repeat center;
+  background-size: cover;
+  height: 100%;
+  font-family: 'PT Sans Narrow', sans-serif;
+  font-size: 16px;
+}
+
+#app{
+  display: flex;
+  flex: auto;
+  max-width: 1440px;
+  min-height: 100%;
+
+  .mailbox {
+    display: flex;
+    width: 100%;
+    margin: 40px;
+  }
+}
+
+.controls {
+  background: rgba(0,0,0,0.4);
+  padding: 24px;
+  color: #fff;
+
+  .btn {margin-bottom: 24px}
+
+  a {
+    display: block;
+    color: #fff;
+
+    + a {margin-top: 16px;}
+
+  }
+}
+
+.messagebox {
+  background-color: #fff;
+  flex: auto;
+  padding: 24px;
+}
+
+.letters-list {
+  background-color: #fff;
+  padding: 24px;
+}
+
+.btn {
+  background: linear-gradient(to right, #6b5bff, #9c3aa2);
+  color: #fff;
+  text-shadow: 0 0 10px #545454;
+  border-radius: 8px;
+  padding: 12px 32px;
+  font-size: 18px;
+  cursor: pointer;
+}

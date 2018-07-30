@@ -11,9 +11,11 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "css-loader": "^0.28.11",
     "firebase": "^5.3.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
+    "vue-style-loader": "^3.1.2",
     "vuefire": "^2.0.0-alpha.12"
   },
   "devDependencies": {
