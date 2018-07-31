@@ -7,6 +7,7 @@
     </div>
     <div class="letters-list">
       <div class="letters">
+        <h3>Исходящие</h3>
         <div class="letters-item" v-for="(letter, idx) in outgoing" :key="idx">
           <div class="date">{{ new Date(+letter.date.seconds * 1000) }}</div>
           <div class="sender">{{ letter.sender }}</div>
@@ -17,7 +18,8 @@
             </button>
           </div>
         </div>
-        <!--div class="letters-item" v-for="(letter, idx) in incoming" :key="idx">
+        <h3>Входящие</h3>
+        <div class="letters-item" v-for="(letter, idx) in incoming" :key="idx">
           <div class="date">{{ new Date(+letter.date.seconds * 1000) }}</div>
           <div class="sender">{{ letter.sender }}</div>
           <div class="subject">{{ letter.subject }}</div>
@@ -26,15 +28,16 @@
               Удалить
             </button>
           </div>
-        </div-->
+        </div>
       </div>
     </div>
     <div class="messagebox">
-      <form @submit="addLocation(subject, message)">
+      <form @submit="sendMessage(subject, message, recipient)">
         <h2>Новое сообщение</h2>
+        <input v-model="recipient" placeholder="Получатель" class="input">
         <input v-model="subject" placeholder="Тема" class="input">
         <input v-model="message" placeholder="Сообщение" class="input">
-        <button type="submit" class="button is-success">Отправить</button>
+        <button type="submit" class="btn">Отправить</button>
       </form>
     </div>
   </div>
@@ -51,6 +54,7 @@ export default {
       letters: [],
       date: '',
       sender: '',
+      recipient: '',
       subject: '',
       message: ''
     }
@@ -62,15 +66,15 @@ export default {
     }
   },
   methods: {
-    addLocation (name, image) {
-      const createdAt = new Date()
-      db.collection('locations').add({ name, image, createdAt })
-      // Clear values
-      this.name = ''
-      this.image = ''
+    sendMessage (subject, message, recipient) {
+      const date = new Date()
+      db.collection('outgoing').add({ subject, message, recipient, date })
+      this.subject = ''
+      this.recipient = ''
+      this.message = ''
     },
-    deleteLocation (id) {
-      db.collection('locations').doc(id).delete()
+    deleteMessage (type, id) {
+      db.collection(type).doc(id).delete()
     }
   }
 }
