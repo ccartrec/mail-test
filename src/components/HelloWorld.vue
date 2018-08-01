@@ -2,29 +2,31 @@
   <div class="mailbox">
     <div class="controls">
       <div class="btn">Новое письмо</div>
-      <a>Входящие</a>
-      <a>Исходящие</a>
+      <a @click="incomingView = true">Входящие</a>
+      <a @click="incomingView = false">Исходящие</a>
     </div>
     <div class="letters-list">
-      <div class="letters">
+      <div v-if="!incomingView">
         <h3>Исходящие</h3>
         <div class="letters-item" v-for="(letter, idx) in outgoing" :key="idx">
           <div class="date">{{ new Date(+letter.date.seconds * 1000) }}</div>
-          <div class="sender">{{ letter.sender }}</div>
+          <div class="sender">{{ letter.recipient }}</div>
           <div class="subject">{{ letter.subject }}</div>
           <div class="actions">
-            <button class="button is-small is-danger" @click="deleteLocation(location.id)">
+            <button @click="deleteMessage('outcoming', letter.id)">
               Удалить
             </button>
           </div>
         </div>
+      </div>
+      <div v-if="incomingView">
         <h3>Входящие</h3>
         <div class="letters-item" v-for="(letter, idx) in incoming" :key="idx">
           <div class="date">{{ new Date(+letter.date.seconds * 1000) }}</div>
           <div class="sender">{{ letter.sender }}</div>
           <div class="subject">{{ letter.subject }}</div>
           <div class="actions">
-            <button class="button is-small is-danger" @click="deleteLocation(location.id)">
+            <button @click="deleteMessage('incoming', letter.id)">
               Удалить
             </button>
           </div>
@@ -48,15 +50,17 @@
 import { db } from '../main'
 
 export default {
-  name: 'HelloWorld',
+  name: 'mailApp',
   data () {
     return {
-      letters: [],
+      outgoing: [],
+      incoming: [],
       date: '',
       sender: '',
       recipient: '',
       subject: '',
-      message: ''
+      message: '',
+      incomingView: true
     }
   },
   firestore () {
@@ -65,6 +69,7 @@ export default {
       outgoing: db.collection('outgoing').orderBy('date')
     }
   },
+
   methods: {
     sendMessage (subject, message, recipient) {
       const date = new Date()
@@ -75,6 +80,7 @@ export default {
     },
     deleteMessage (type, id) {
       db.collection(type).doc(id).delete()
+      console.log(db.collection(type).doc(id))
     }
   }
 }

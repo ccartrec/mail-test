@@ -88,3 +88,10 @@ form {
 
   .btn {margin-top: 16px}
 }
+
+
+.letters-item {
+  display: flex;
+
+  > * {padding: 0 4px}
+}
