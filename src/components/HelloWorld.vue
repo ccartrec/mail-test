@@ -9,7 +9,7 @@
       <div v-if="!incomingView">
         <h3>Исходящие</h3>
         <div class="letters-item" v-for="(letter, idx) in outgoing" :key="idx">
-          <div class="date">{{ new Date(+letter.date.seconds * 1000) }}</div>
+          <div class="date">{{ timeConverter(+letter.date.seconds) }}</div>
           <div class="sender">{{ letter.recipient }}</div>
           <div class="subject">{{ letter.subject }}</div>
           <div class="actions">
@@ -22,7 +22,7 @@
       <div v-if="incomingView">
         <h3>Входящие</h3>
         <div class="letters-item" v-for="(letter, idx) in incoming" :key="idx">
-          <div class="date">{{ new Date(+letter.date.seconds * 1000) }}</div>
+          <div class="date">{{ timeConverter(+letter.date.seconds) }}</div>
           <div class="sender">{{ letter.sender }}</div>
           <div class="subject">{{ letter.subject }}</div>
           <div class="actions">
@@ -81,6 +81,18 @@ export default {
     deleteMessage (type, id) {
       db.collection(type).doc(id).delete()
       console.log(db.collection(type).doc(id))
+    },
+    timeConverter (timestamp) {
+      let a = new Date(timestamp * 1000)
+      let months = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек']
+      let year = a.getFullYear()
+      let month = months[a.getMonth()]
+      let date = a.getDate()
+      let hour = a.getHours()
+      let min = a.getMinutes()
+      let sec = a.getSeconds()
+      let time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec
+      return time
     }
   }
 }
