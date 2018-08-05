@@ -1,7 +1,7 @@
 <template>
   <div class="mailbox">
     <div class="controls">
-      <div class="btn">Новое письмо</div>
+      <div class="btn" @click="writeMessage">Новое письмо</div>
       <a @click="incomingView = true">Входящие</a>
       <a @click="incomingView = false">Исходящие</a>
     </div>
@@ -21,7 +21,7 @@
       </div>
       <div v-if="incomingView">
         <h3>Входящие</h3>
-        <div class="letters-item" v-for="(letter, idx) in incoming" :key="idx">
+        <div class="letters-item" v-for="(letter, idx) in incoming" :key="idx" @click="viewMessage(letter.subject, letter.sender, letter.message)">
           <div class="date">{{ timeConverter(+letter.date.seconds) }}</div>
           <div class="sender">{{ letter.sender }}</div>
           <div class="subject">{{ letter.subject }}</div>
@@ -34,13 +34,18 @@
       </div>
     </div>
     <div class="messagebox">
-      <form @submit="sendMessage(subject, message, recipient)">
+      <form v-if="newMessage" @submit="sendMessage(subject, message, recipient)">
         <h2>Новое сообщение</h2>
         <input v-model="recipient" placeholder="Получатель" class="input">
         <input v-model="subject" placeholder="Тема" class="input">
         <input v-model="message" placeholder="Сообщение" class="input">
         <button type="submit" class="btn">Отправить</button>
       </form>
+      <div v-else class="viewMessage">
+        <div>Письмо от {{this.sender}}</div>
+        <div>{{this.subject}}</div>
+        <div>{{this.message}}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -60,7 +65,8 @@ export default {
       recipient: '',
       subject: '',
       message: '',
-      incomingView: true
+      incomingView: true,
+      newMessage: true
     }
   },
   firestore () {
@@ -93,6 +99,17 @@ export default {
       let sec = a.getSeconds()
       let time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec
       return time
+    },
+    viewMessage (subject, sender, message) {
+      this.newMessage = false
+      this.subject = subject
+      this.sender = sender
+      this.message = message
+    },
+    writeMessage () {
+      this.newMessage = true
+      this.subject = ''
+      this.message = ''
     }
   }
 }
