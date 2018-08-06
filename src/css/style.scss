@@ -91,7 +91,12 @@ form {
 
 
 .letters-item {
-  display: flex;
+  display: table;
+  width: 100%;
+  table-layout: fixed;
 
-  > * {padding: 0 4px}
+  > * {
+    padding: 0 4px;
+    display: table-cell;
+  }
 }

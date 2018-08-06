@@ -8,7 +8,7 @@
     <div class="letters-list">
       <div v-if="!incomingView">
         <h3>Исходящие</h3>
-        <div class="letters-item" v-for="(letter, idx) in outgoing" :key="idx">
+        <div class="letters-item" v-for="(letter, idx) in outgoing" :key="idx" @click="viewMessage('outgoing', letter.subject, letter.recipient, letter.message)">
           <div class="date">{{ timeConverter(+letter.date.seconds) }}</div>
           <div class="sender">{{ letter.recipient }}</div>
           <div class="subject">{{ letter.subject }}</div>
@@ -21,7 +21,7 @@
       </div>
       <div v-if="incomingView">
         <h3>Входящие</h3>
-        <div class="letters-item" v-for="(letter, idx) in incoming" :key="idx" @click="viewMessage(letter.subject, letter.sender, letter.message)">
+        <div class="letters-item" v-for="(letter, idx) in incoming" :key="idx" @click="viewMessage('incoming', letter.subject, letter.sender, letter.message)">
           <div class="date">{{ timeConverter(+letter.date.seconds) }}</div>
           <div class="sender">{{ letter.sender }}</div>
           <div class="subject">{{ letter.subject }}</div>
@@ -42,8 +42,9 @@
         <button type="submit" class="btn">Отправить</button>
       </form>
       <div v-else class="viewMessage">
-        <div>Письмо от {{this.sender}}</div>
-        <div>{{this.subject}}</div>
+        <div>Письмо {{this.letterType === 'incoming' ? 'от' : 'для'}} <b>{{this.sender}}</b></div>
+        <div>Тема: <b>{{this.subject}}</b></div>
+        <hr>
         <div>{{this.message}}</div>
       </div>
     </div>
@@ -66,7 +67,8 @@ export default {
       subject: '',
       message: '',
       incomingView: true,
-      newMessage: true
+      newMessage: true,
+      letterType: ''
     }
   },
   firestore () {
@@ -100,8 +102,9 @@ export default {
       let time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec
       return time
     },
-    viewMessage (subject, sender, message) {
+    viewMessage (letterType, subject, sender, message) {
       this.newMessage = false
+      this.letterType = letterType
       this.subject = subject
       this.sender = sender
       this.message = message
