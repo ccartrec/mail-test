@@ -13,9 +13,7 @@
           <div class="sender">{{ letter.recipient }}</div>
           <div class="subject">{{ letter.subject }}</div>
           <div class="actions">
-            <button @click="deleteMessage('outcoming', letter.id)">
-              Удалить
-            </button>
+            <button title="Удалить" @click.stop="deleteMessage(1, letter.id)"></button>
           </div>
         </div>
       </div>
@@ -26,9 +24,7 @@
           <div class="sender">{{ letter.sender }}</div>
           <div class="subject">{{ letter.subject }}</div>
           <div class="actions">
-            <button @click="deleteMessage('incoming', letter.id)">
-              Удалить
-            </button>
+            <button title="Удалить" @click.stop="deleteMessage(2, letter.id)"></button>
           </div>
         </div>
       </div>
@@ -87,8 +83,7 @@ export default {
       this.message = ''
     },
     deleteMessage (type, id) {
-      db.collection(type).doc(id).delete()
-      console.log(db.collection(type).doc(id))
+      db.collection((type === 1 ? 'outgoing' : 'incoming')).doc(id).delete()
     },
     timeConverter (timestamp) {
       let a = new Date(timestamp * 1000)
