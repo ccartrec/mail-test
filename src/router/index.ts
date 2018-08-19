@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import MailApp from '@/components/MailApp'
+import MailApp from '@/components/MailApp.vue'
 
 Vue.use(Router)
 
